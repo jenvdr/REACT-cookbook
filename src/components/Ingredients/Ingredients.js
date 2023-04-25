@@ -14,15 +14,8 @@ const Ingredients = () => {
     ])
   }
 
-  const onRemoveItem = () => {
-    console.log('Remove')
-    setUserIngredients((userIngredients, id) => {
-      const idIndex = userIngredients.findIndex((obj) => obj.id === id);
-      if (idIndex > -1) {
-        userIngredients.splice(idIndex, 1);
-      }
-      return userIngredients
-    })
+  const onRemoveItem = ingredientId => {
+    setUserIngredients(prevIngredients => prevIngredients.filter(ingredient => ingredient.id !== ingredientId));
   }
 
   return (
