@@ -4,7 +4,7 @@ import Card from '../UI/Card';
 import './Search.css';
 
 const Search = React.memo(props => {
-  const {onFilterItemsBySearch} = props;
+  const { onFilterItemsBySearch } = props;
   const [enteredSearch, setEnteredSearch] = useState('');
 
   const searchHandler = event => {
@@ -32,7 +32,7 @@ const Search = React.memo(props => {
       }
       props.onFilterItemsBySearch(loadedIngredients);
     });
-  }, [onFilterItemsBySearch, enteredSearch])
+  }, [enteredSearch, onFilterItemsBySearch])
 
   return (
     <section className="search">
