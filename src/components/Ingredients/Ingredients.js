@@ -8,10 +8,24 @@ const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
 
   const addIngredientHandler = ingredient => {
-    setUserIngredients(prevIngredients => [
-      ...prevIngredients,
-      {id: Math.random().toString(), ...ingredient}
-    ])
+    fetch('https://react-cookbook-e3ca4-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json', {
+      method: 'POST',
+      body: JSON.stringify(ingredient),
+      headers: {
+        'content-type': 'application/json'
+      },
+    }).then(response => {
+      if (!response.ok) {
+        return;
+      }
+
+      return response.json();
+    }).then(responseData => {
+      setUserIngredients(prevIngredients => [
+        ...prevIngredients,
+        {id: responseData.name, ...ingredient}
+      ])
+    });
   }
 
   const onRemoveItem = ingredientId => {
