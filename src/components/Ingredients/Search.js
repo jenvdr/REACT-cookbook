@@ -38,6 +38,7 @@ const Search = React.memo(props => {
       clearTimeout(timer)
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enteredSearch, onFilterItemsBySearch, inputRef])
 
   return (
