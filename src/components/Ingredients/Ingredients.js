@@ -1,16 +1,48 @@
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 
 import IngredientForm from './IngredientForm';
+import IngredientList from './IngredientList';
 import Search from './Search';
 
-function Ingredients() {
+const Ingredients = () => {
+  const [userIngredients, setUserIngredients] = useState([]);
+
+  const addIngredientHandler = ingredient => {
+    fetch('https://react-cookbook-e3ca4-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json', {
+      method: 'POST',
+      body: JSON.stringify(ingredient),
+      headers: {
+        'content-type': 'application/json'
+      },
+    }).then(response => {
+      if (!response.ok) {
+        return;
+      }
+
+      return response.json();
+    }).then(responseData => {
+      setUserIngredients(prevIngredients => [
+        ...prevIngredients,
+        {id: responseData.name, ...ingredient}
+      ])
+    });
+  }
+
+  const onRemoveItem = ingredientId => {
+    setUserIngredients(prevIngredients => prevIngredients.filter(ingredient => ingredient.id !== ingredientId));
+  }
+
+  const onFilterItemsBySearch = useCallback((searchKey) => {
+    setUserIngredients(searchKey);
+  }, [] );
+
   return (
     <div className="App">
-      <IngredientForm />
+      <IngredientForm addIngredientHandler={addIngredientHandler}/>
 
       <section>
-        <Search />
-        {/* Need to add list here! */}
+        <Search onFilterItemsBySearch={onFilterItemsBySearch}/>
+        <IngredientList ingredients={userIngredients} onRemoveItem={onRemoveItem}/>
       </section>
     </div>
   );
